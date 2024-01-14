@@ -14,18 +14,12 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-	howtos = ""
+	content = ""
 	if message.content.startswith("how") or message.content.startswith("why") or message.content.startswith("wiki") or message.content.startswith("wikihow"):
-		if message.author.id == 879180266533437460:
-			pass
-		else:
-			cringe = message.content
-			max_results = 1
-			how_tos = search_wikihow(cringe, max_results)
-			howtoto =  how_tos[0]
-			for step in range(len(howtoto.steps)):
-				strep = howtoto.steps[step]
-				howtos = howtos + str(strep.number) + " - " + strep.summary + "\n"
-			await message.reply(f"**Query: {cringe}** **\n\nArticle Name:** *{howtoto.title}* ```\n{howtos}```")
+		if message.author.id != bot.user.id:
+			how_to = search_wikihow(message.content, 1)[0]
+			for step in how_to.steps:
+				content = content + str(step.number) + " - " + step.summary + "\n"
+			await message.reply(f"**Query: {message.content}** **\n\nArticle Name:** *{how_to.title}* ```\n{content}```")
 
 bot.run(token)
